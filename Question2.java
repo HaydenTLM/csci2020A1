@@ -1,71 +1,93 @@
+
+
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.HPos;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
+
 public class Question2 extends Application {
-  @Override
-  // Override the start method in the Application class
-  public void start(Stage primaryStage) {
-    GridPane pane = new GridPane();
 
-    pane.setHgap(10);
-    pane.setVgap(10);
+    @Override
+    public void start(Stage primaryStage) throws Exception{
+        GridPane gridPane = new GridPane();
 
-    Label label1 = new Label("Investment Amount: ");
-    TextField tfNumber1 = new TextField();
-    Label label2 = new Label("Years: ");
-    TextField tfNumber2 = new TextField();
-    Label label3 = new Label("Annual Interest Rate: ");
-    TextField tfNumber3 = new TextField();
-    Label label4 = new Label("Future Value: ");
-    TextField tfResult = new TextField();
-    tfNumber1.setPrefColumnCount(3);
-    tfNumber2.setPrefColumnCount(3);
-    tfNumber3.setPrefColumnCount(3);
-    tfResult.setPrefColumnCount(3);
+        //Creating text fields and respective labels
+        Label lAmount = new Label("Investment Amount");
+        TextField tfAmount = new TextField();
+        tfAmount.setAlignment(Pos.BASELINE_RIGHT);
 
-    pane.add(label1,0,0);
-    pane.add(tfNumber1,1,0);
-    pane.add(label2,0,1);
-    pane.add(tfNumber2,1,1);
-    pane.add(label3,0,2);
-    pane.add(tfNumber3,1,2);
-    pane.add(label4,0,3);
-    pane.add(tfResult,1,3);
+        Label lYears = new Label("Years");
+        TextField tfYears = new TextField();
+        tfYears.setAlignment(Pos.BASELINE_RIGHT);
 
-    HBox hBox = new HBox();
-    Button btCalc = new Button("Calculate");
-    hBox.setAlignment(Pos.BOTTOM_RIGHT);
-    hBox.getChildren().addAll(btCalc);
+        Label lRate = new Label("Annual Interest Rate");
+        TextField tfRate = new TextField();
+        tfRate.setAlignment(Pos.BASELINE_RIGHT);
 
-    BorderPane borderPane = new BorderPane();
-    borderPane.setCenter(pane);
-    borderPane.setBottom(hBox);
-    BorderPane.setAlignment(hBox, Pos.TOP_RIGHT);
+        Label lFutureValue = new Label("Future Value");
+        TextField tfFutureValue = new TextField();
+        tfFutureValue.setAlignment(Pos.BASELINE_RIGHT);
 
-    Scene scene = new Scene(borderPane, 175, 165);
-    primaryStage.setTitle("Question_2");
-    primaryStage.setScene(scene);
-    primaryStage.show();
+        //adding the calculate button
+        Button bCalculate = new Button("Calculate");
+        GridPane.setHalignment(bCalculate, HPos.RIGHT);
 
-    btCalc.setOnAction(e -> {
-      tfResult.setText(Calculate((Double.parseDouble(tfNumber3.getText())/100 + 1),
-      Double.parseDouble(tfNumber2.getText()), Double.parseDouble(tfNumber1.getText())) + "");
-    });
-  }
+        //adding handler for the calculate button
+        bCalculate.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                double amount = Double.parseDouble(tfAmount.getText());
+                double years = Double.parseDouble(tfYears.getText());
+                double interestRate = Double.parseDouble(tfRate.getText());
+                double futureValue = calculateFutureVal(amount, years, interestRate);
+                tfFutureValue.setText(String.valueOf(futureValue));
+            }
+        });
 
-  public static void main(String[] args) {
-    launch(args);
-  }
 
-  public static double Calculate(double a, double b, double c) {
-    return (Math.pow(a,b) * c);
-  }
+
+        //adding stuff to gridPane
+        gridPane.add(lAmount, 0, 0);
+        gridPane.add(tfAmount,1,0);
+
+        gridPane.add(lYears, 0, 1);
+        gridPane.add(tfYears, 1, 1);
+
+        gridPane.add(lRate, 0, 2);
+        gridPane.add(tfRate, 1, 2);
+
+        gridPane.add(lFutureValue, 0, 3);
+        gridPane.add(tfFutureValue, 1, 3);
+
+        gridPane.add(bCalculate, 1, 4);
+
+
+        gridPane.setPadding(new Insets(10));
+        gridPane.setVgap(7);
+
+        Scene scene = new Scene(gridPane);
+        primaryStage.setTitle("Question 2");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+
+    public static double calculateFutureVal(double amount, double years, double interestRate){
+        double monthlyInterestRate = interestRate/1200;
+        double futureValue = amount*Math.pow((1+monthlyInterestRate), years*12);
+        return futureValue;
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
 }
