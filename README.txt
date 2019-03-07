@@ -1,3 +1,5 @@
+Pulkit Madan and Hayden Murray 
+
 Question1 is compiled with "javac Question1.java" and run with "java Question1"
 Question2 is compiled with "javac Question2.java" and run with "java Question2"
 
